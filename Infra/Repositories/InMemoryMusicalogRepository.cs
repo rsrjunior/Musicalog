@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Musicalog.Infra.Repositories
 {
-    public class InMemoryMusicalogRepository<T> : IMusicalogRepository<T> where T : EntityBase
+    public abstract class InMemoryMusicalogRepository<T> : IMusicalogRepository<T> where T : EntityBase
     {
         private IList<T> _inMemoryList;
         private int _index;
@@ -38,11 +38,6 @@ namespace Musicalog.Infra.Repositories
             int i = _inMemoryList.IndexOf(item);
             _inMemoryList[i] = entity;
             return true;
-        }
-
-        public IList<T> Find(Func<T, bool> predicate)
-        {
-            return _inMemoryList.Where(predicate).ToList();
         }
 
         public IList<T> GetAll()

@@ -10,6 +10,6 @@ namespace Musicalog.Core.Services
         bool Delete(int id);
         bool Edit(Album album);
         Album GetById(int id);
-        IList<Album> List(string title, string artistName);
+        IList<Album> Filter(string title, string artistName);
     }
 }

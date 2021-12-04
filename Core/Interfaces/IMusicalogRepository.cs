@@ -10,7 +10,6 @@ namespace Musicalog.Core.Interfaces
         public T Create(T entity);
         public bool Delete(int id);
         public bool Edit(T entity);
-        IList<T> Find(Func<T, bool> predicate);
         IList<T> GetAll();
         T GetById(int id);
     }
