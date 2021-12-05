@@ -36,7 +36,7 @@ namespace Musicalog.Core.Services
             return _repository.GetById(id);
         }
 
-        public IList<Album> List(string title, string artistName)
+        public IEnumerable<Album> List(string title, string artistName)
         {
             Dictionary<string, dynamic> parameters = new Dictionary<string, dynamic>(2);
             if (!string.IsNullOrEmpty(title))

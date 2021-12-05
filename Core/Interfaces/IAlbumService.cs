@@ -10,6 +10,6 @@ namespace Musicalog.Core.Interfaces
         bool Delete(int id);
         bool Edit(Album album);
         Album GetById(int id);
-        IList<Album> List(string title, string artistName);
+        IEnumerable<Album> List(string title, string artistName);
     }
 }

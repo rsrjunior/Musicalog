@@ -79,7 +79,7 @@ namespace Musicalog.Infra.Repositories
             return updated > 0;
         }
 
-        public IList<T> Find(IDictionary<string, dynamic> parameters)
+        public IEnumerable<T> Find(IDictionary<string, dynamic> parameters)
         {
             StringBuilder query = new StringBuilder("Select * from " + typeof(T).Name);
             DynamicParameters queryParams = new DynamicParameters();
@@ -97,12 +97,12 @@ namespace Musicalog.Infra.Repositories
                 }
             }
             var result = _connection.Query<T>(query.ToString(), queryParams);
-            return result.ToList();
+            return result;
         }
 
-        public IList<T> GetAll()
+        public IEnumerable<T> GetAll()
         {
-            return _connection.Query<T>("Select * from " + typeof(T).Name).ToList();
+            return _connection.Query<T>("Select * from " + typeof(T).Name);
         }
 
         public T GetById(int id)

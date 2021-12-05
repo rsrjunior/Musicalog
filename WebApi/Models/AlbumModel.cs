@@ -2,7 +2,7 @@
 
 namespace WebApi.Models
 {
-    public class AlbumDTO
+    public class AlbumModel
     {
         public int Id { get; set; }
         public string Title { get; set; }

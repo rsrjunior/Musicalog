@@ -23,83 +23,121 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<AlbumDTO> Get(string title, string artistName)
+        public ActionResult<IEnumerable<AlbumModel>> Get(string title, string artistName)
         {
-            var albums = _albumService.List(title, artistName);
-            return albums.Select(i => new AlbumDTO
+            try
             {
-                Id = i.Id,
-                ArtistName = i.ArtistName,
-                Stock = i.Stock,
-                Title = i.Title,
-                Type = i.Type.ToString()
-            });
+                var albums = _albumService.List(title, artistName);
+                return Ok(albums.Select(i => new AlbumModel
+                {
+                    Id = i.Id,
+                    ArtistName = i.ArtistName,
+                    Stock = i.Stock,
+                    Title = i.Title,
+                    Type = i.Type.ToString()
+                }));
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
+
         }
 
         [HttpGet("{id}")]
-        public AlbumDTO Get(int id)
+        public ActionResult<AlbumModel> Get(int id)
         {
-            var album = _albumService.GetById(id);
-            if (album == null)
+            try
             {
-                return null;
-            }
+                var album = _albumService.GetById(id);
+                if (album == null)
+                {
+                    return NotFound();
+                }
 
-            return new AlbumDTO
+                return Ok(new AlbumModel
+                {
+                    Id = album.Id,
+                    ArtistName = album.ArtistName,
+                    Stock = album.Stock,
+                    Title = album.Title,
+                    Type = album.Type.ToString()
+                });
+            }
+            catch (Exception ex)
             {
-                Id = album.Id,
-                ArtistName = album.ArtistName,
-                Stock = album.Stock,
-                Title = album.Title,
-                Type = album.Type.ToString()
-            };
+                return Problem(ex.Message);
+            }
+           
         }
 
         [HttpPost]
-        public AlbumDTO Post([FromBody] AlbumDTO item)
+        public ActionResult<AlbumModel> Post([FromBody] AlbumModel item)
         {
-            var album = _albumService.Create(new Album
+            try
             {
-                ArtistName = item.ArtistName,
-                Title = item.Title,
-                Stock = item.Stock,
-                Type = Enum.Parse<AlbumType>(item.Type)
-            });
+                var album = _albumService.Create(new Album
+                {
+                    ArtistName = item.ArtistName,
+                    Title = item.Title,
+                    Stock = item.Stock,
+                    Type = Enum.Parse<AlbumType>(item.Type)
+                });
 
-            return new AlbumDTO
+                return Ok(new AlbumModel
+                {
+                    Id = album.Id,
+                    ArtistName = album.ArtistName,
+                    Stock = album.Stock,
+                    Title = album.Title,
+                    Type = album.Type.ToString()
+                });
+            }
+            catch (Exception ex)
             {
-                Id = album.Id,
-                ArtistName = album.ArtistName,
-                Stock = album.Stock,
-                Title = album.Title,
-                Type = album.Type.ToString()
-            };
+
+                return Problem(ex.Message);
+            }
+            
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] AlbumDTO item)
+        public ActionResult Put(int id, [FromBody] AlbumModel item)
         {
-            var album = _albumService.GetById(id);
-            if (album == null)
+            try
             {
-                throw new KeyNotFoundException();
+                var album = _albumService.GetById(id);
+                if (album == null)
+                {
+                    return NotFound();
+                }
+
+                album.ArtistName = item.ArtistName;
+                album.Title = item.Title;
+                album.Stock = item.Stock;
+                album.Type = Enum.Parse<AlbumType>(item.Type);
+
+                bool result = _albumService.Edit(album);
+
+                return result ? Ok() : Problem("The resource was not changed");
             }
-
-            album.ArtistName = item.ArtistName;
-            album.Title = item.Title;
-            album.Stock = item.Stock;
-            album.Type = Enum.Parse<AlbumType>(item.Type);
-
-            _albumService.Edit(album);
-
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public ActionResult Delete(int id)
         {
-            if (!_albumService.Delete(id))
+            try
             {
-                throw new Exception();
+                bool result = _albumService.Delete(id);
+                return result ? Ok() : Problem("The resource was not deleted");
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.Message);
             }
         }
     }

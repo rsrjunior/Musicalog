@@ -94,7 +94,7 @@ namespace Musicalog.Core.Services.Tests
 
             var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(albumList));
 
-            Assert.Equal(1, albumService.List(title, artistName).Count);
+            Assert.Single(albumService.List(title, artistName));
         }
     }
 }

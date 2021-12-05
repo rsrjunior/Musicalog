@@ -10,8 +10,8 @@ namespace Musicalog.Core.Interfaces
         public T Create(T entity);
         public bool Delete(int id);
         public bool Edit(T entity);
-        IList<T> GetAll();
-        IList<T> Find(IDictionary<string,dynamic> parameters);
+        IEnumerable<T> GetAll();
+        IEnumerable<T> Find(IDictionary<string,dynamic> parameters);
         T GetById(int id);
     }
 }

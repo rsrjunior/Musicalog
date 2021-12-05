@@ -40,14 +40,14 @@ namespace Musicalog.Infra.Repositories
             return true;
         }
 
-        public IList<T> Find(IDictionary<string, dynamic> parameters)
+        public IEnumerable<T> Find(IDictionary<string, dynamic> parameters)
         {
             throw new NotImplementedException();
         }
 
-        public IList<T> GetAll()
+        public IEnumerable<T> GetAll()
         {
-            return _inMemoryList.ToList();
+            return _inMemoryList;
         }
 
         public T GetById(int id)
