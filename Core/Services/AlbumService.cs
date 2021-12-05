@@ -11,8 +11,8 @@ namespace Musicalog.Core.Services
 {
     public class AlbumService : IAlbumService
     {
-        private IAlbumRepository _repository;
-        public AlbumService(IAlbumRepository repository)
+        private IMusicalogRepository<Album> _repository;
+        public AlbumService(IMusicalogRepository<Album> repository)
         {
             _repository = repository;
         }
@@ -36,9 +36,18 @@ namespace Musicalog.Core.Services
             return _repository.GetById(id);
         }
 
-        public IList<Album> Filter(string title, string artistName)
+        public IList<Album> List(string title, string artistName)
         {
-            return _repository.Filter(title, artistName);
+            Dictionary<string, dynamic> parameters = new Dictionary<string, dynamic>(2);
+            if (!string.IsNullOrEmpty(title))
+            {
+                parameters.Add(nameof(Album.Title), title);
+            }
+            if (!string.IsNullOrEmpty(artistName))
+            {
+                parameters.Add(nameof(Album.Title), artistName);
+            }
+            return _repository.Find(parameters);
         }
     }
 }

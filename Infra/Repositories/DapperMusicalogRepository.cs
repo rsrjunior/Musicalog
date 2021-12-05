@@ -25,6 +25,10 @@ namespace Musicalog.Infra.Repositories
             throw new NotImplementedException();
         }
 
+        public IList<T> Find(IDictionary<string, dynamic> parameters)
+        {
+            throw new NotImplementedException();
+        }
 
         public IList<T> GetAll()
         {

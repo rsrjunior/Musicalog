@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Musicalog.Core.Services
+namespace Musicalog.Core.Interfaces
 {
     public interface IAlbumService
     {
@@ -10,6 +10,6 @@ namespace Musicalog.Core.Services
         bool Delete(int id);
         bool Edit(Album album);
         Album GetById(int id);
-        IList<Album> Filter(string title, string artistName);
+        IList<Album> List(string title, string artistName);
     }
 }

@@ -17,8 +17,8 @@ namespace Musicalog.Core.Services.Tests
         public void AlbumServiceTest()
         {
             var albumList = new List<Album>();
-    
-            var albumService = new AlbumService(new InMemoryAlbumRepository(albumList));
+
+            var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(albumList));
 
             Assert.NotNull(albumService);
         }
@@ -26,7 +26,7 @@ namespace Musicalog.Core.Services.Tests
         [Fact()]
         public void CreateTest()
         {
-            var albumService = new AlbumService(new InMemoryAlbumRepository(new List<Album>()));
+            var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(new List<Album>()));
 
             var newItem = albumService.Create(new Album { Id = 1, ArtistName = "Artist1", Title = "Title1", Stock = 1, Type = AlbumType.CD });
 
@@ -39,7 +39,7 @@ namespace Musicalog.Core.Services.Tests
             var albumList = new List<Album>();
             albumList.Add(new Album { Id = 1, ArtistName = "Artist1", Title = "Title1", Stock = 1, Type = AlbumType.CD });
 
-            var albumService = new AlbumService(new InMemoryAlbumRepository(albumList));
+            var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(albumList));
 
             Assert.True(albumService.Delete(albumList[0].Id));
         }
@@ -50,7 +50,7 @@ namespace Musicalog.Core.Services.Tests
             var albumList = new List<Album>();
             var item = new Album { Id = 1, ArtistName = "Artist1", Title = "Title1", Stock = 1, Type = AlbumType.CD };
             albumList.Add(item);
-            var albumService = new AlbumService(new InMemoryAlbumRepository(albumList));
+            var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(albumList));
 
             item.Title = "ChangedTitle";
 
@@ -64,7 +64,7 @@ namespace Musicalog.Core.Services.Tests
             var albumList = new List<Album>();
             var item = new Album { Id = 1, ArtistName = "Artist1", Title = "Title1", Stock = 1, Type = AlbumType.CD };
             albumList.Add(item);
-            var albumService = new AlbumService(new InMemoryAlbumRepository(albumList));
+            var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(albumList));
 
             var getItem = albumService.GetById(item.Id);
 
@@ -78,9 +78,9 @@ namespace Musicalog.Core.Services.Tests
             var albumList = new List<Album>();
             albumList.Add(new Album { Id = 1, ArtistName = "Artist1", Title = "Title1", Stock = 1, Type = AlbumType.CD });
 
-            var albumService = new AlbumService(new InMemoryAlbumRepository(albumList));
+            var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(albumList));
 
-            Assert.NotEmpty(albumService.Filter("", ""));
+            Assert.NotEmpty(albumService.List("", ""));
         }
         [Theory]
         [InlineData("Title1", "Artist1")]
@@ -92,9 +92,9 @@ namespace Musicalog.Core.Services.Tests
             albumList.Add(new Album { Id = 1, ArtistName = artistName, Title = title, Stock = 1, Type = AlbumType.CD });
             albumList.Add(new Album { Id = 2, ArtistName = "AnotherArtist", Title = "AnotherTitle", Stock = 1, Type = AlbumType.CD });
 
-            var albumService = new AlbumService(new InMemoryAlbumRepository(albumList));
+            var albumService = new AlbumService(new InMemoryMusicalogRepository<Album>(albumList));
 
-            Assert.Equal(1, albumService.Filter(title, artistName).Count);
+            Assert.Equal(1, albumService.List(title, artistName).Count);
         }
     }
 }

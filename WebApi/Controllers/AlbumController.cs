@@ -8,6 +8,7 @@ using Musicalog.Core.Services;
 using WebApi.Models;
 using Musicalog.Core.Entities;
 using Musicalog.Core.Enums;
+using Musicalog.Core.Interfaces;
 
 namespace WebApi.Controllers
 {
@@ -24,7 +25,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IEnumerable<AlbumDTO> Get(string title, string artistName)
         {
-            var albums = _albumService.Filter(title, artistName);
+            var albums = _albumService.List(title, artistName);
             return albums.Select(i => new AlbumDTO
             {
                 Id = i.Id,
