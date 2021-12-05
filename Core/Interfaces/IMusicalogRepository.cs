@@ -2,16 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Musicalog.Core.Interfaces
 {
     public interface IMusicalogRepository<T> where T : EntityBase
     {
-        public T Create(T entity);
-        public bool Delete(int id);
-        public bool Edit(T entity);
-        IEnumerable<T> GetAll();
-        IEnumerable<T> Find(IDictionary<string,dynamic> parameters);
-        T GetById(int id);
+        Task<T> Create(T entity);
+        Task<bool> Delete(int id);
+        Task<bool> Edit(T entity);
+        Task<IEnumerable<T>> GetAll();
+        Task<IEnumerable<T>> Find(IDictionary<string,dynamic> parameters);
+        Task<T> GetById(int id);
     }
 }

@@ -17,7 +17,7 @@ namespace Musicalog.Infra.Repositories
         {
             _connection = connection;
         }
-        public T Create(T entity)
+        public async Task<T> Create(T entity)
         {
             StringBuilder insertCommand = new StringBuilder("INSERT INTO " + typeof(T).Name + "(");
             StringBuilder valuesCommand = new StringBuilder(" VALUES (");
@@ -41,20 +41,20 @@ namespace Musicalog.Infra.Repositories
             insertCommand.Append(")");
             valuesCommand.Append(");");
 
-            entity.Id = _connection.QuerySingle<int>(insertCommand.ToString() +
+            entity.Id = await _connection.QuerySingleAsync<int>(insertCommand.ToString() +
                                                     valuesCommand.ToString() +
                                                     "SELECT CAST(SCOPE_IDENTITY() as int)", parameters);
 
             return entity;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            var deleted = _connection.Execute("Delete from " + typeof(T).Name + " where Id=@Id", new { Id = id });
+            var deleted = await _connection.ExecuteAsync("Delete from " + typeof(T).Name + " where Id=@Id", new { Id = id });
             return deleted > 0;
         }
 
-        public bool Edit(T entity)
+        public async Task<bool> Edit(T entity)
         {
             StringBuilder updateCommand = new StringBuilder("UPDATE " + typeof(T).Name + " SET ");
             DynamicParameters parameters = new DynamicParameters();
@@ -73,13 +73,13 @@ namespace Musicalog.Infra.Repositories
             updateCommand.Append(" WHERE Id=@Id");
             parameters.Add("@Id", entity.Id);
 
-            var updated = _connection.Execute(updateCommand.ToString(), parameters);
+            var updated = await _connection.ExecuteAsync(updateCommand.ToString(), parameters);
 
 
             return updated > 0;
         }
 
-        public IEnumerable<T> Find(IDictionary<string, dynamic> parameters)
+        public async Task<IEnumerable<T>> Find(IDictionary<string, dynamic> parameters)
         {
             StringBuilder query = new StringBuilder("Select * from " + typeof(T).Name);
             DynamicParameters queryParams = new DynamicParameters();
@@ -96,18 +96,19 @@ namespace Musicalog.Infra.Repositories
                     queryParams.Add("@" + item.Key, item.Value);
                 }
             }
-            var result = _connection.Query<T>(query.ToString(), queryParams);
+            var result = await _connection.QueryAsync<T>(query.ToString(), queryParams);
             return result;
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task<IEnumerable<T>> GetAll()
         {
-            return _connection.Query<T>("Select * from " + typeof(T).Name);
+            return await _connection.QueryAsync<T>("Select * from " + typeof(T).Name);
         }
 
-        public T GetById(int id)
+        public async Task<T> GetById(int id)
         {
-            return _connection.Query<T>("Select * from " + typeof(T).Name + " where Id=@Id", new { Id = id }).FirstOrDefault();
+            var result = await _connection.QueryAsync<T>("Select * from " + typeof(T).Name + " where Id=@Id", new { Id = id });
+            return result.FirstOrDefault();
         }
     }
 }

@@ -23,11 +23,11 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<AlbumModel>> Get(string title, string artistName)
+        public async Task<ActionResult<IEnumerable<AlbumModel>>> Get(string title, string artistName)
         {
             try
             {
-                var albums = _albumService.List(title, artistName);
+                var albums = await _albumService.List(title, artistName);
                 return Ok(albums.Select(i => new AlbumModel
                 {
                     Id = i.Id,
@@ -45,11 +45,11 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<AlbumModel> Get(int id)
+        public async Task<ActionResult<AlbumModel>> Get(int id)
         {
             try
             {
-                var album = _albumService.GetById(id);
+                var album = await _albumService.GetById(id);
                 if (album == null)
                 {
                     return NotFound();
@@ -72,11 +72,11 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<AlbumModel> Post([FromBody] AlbumModel item)
+        public async Task<ActionResult<AlbumModel>> Post([FromBody] AlbumModel item)
         {
             try
             {
-                var album = _albumService.Create(new Album
+                var album = await _albumService.Create(new Album
                 {
                     ArtistName = item.ArtistName,
                     Title = item.Title,
@@ -102,11 +102,11 @@ namespace WebApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult Put(int id, [FromBody] AlbumModel item)
+        public async Task<ActionResult> Put(int id, [FromBody] AlbumModel item)
         {
             try
             {
-                var album = _albumService.GetById(id);
+                var album = await _albumService.GetById(id);
                 if (album == null)
                 {
                     return NotFound();
@@ -117,7 +117,7 @@ namespace WebApi.Controllers
                 album.Stock = item.Stock;
                 album.Type = Enum.Parse<AlbumType>(item.Type);
 
-                bool result = _albumService.Edit(album);
+                bool result = await _albumService.Edit(album);
 
                 return result ? Ok() : Problem("The resource was not changed");
             }
@@ -128,11 +128,11 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(int id)
         {
             try
             {
-                bool result = _albumService.Delete(id);
+                bool result = await _albumService.Delete(id);
                 return result ? Ok() : Problem("The resource was not deleted");
             }
             catch (Exception ex)

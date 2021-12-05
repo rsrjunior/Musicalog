@@ -16,27 +16,27 @@ namespace Musicalog.Core.Services
         {
             _repository = repository;
         }
-        public Album Create(Album album)
+        public async Task<Album> Create(Album album)
         {
-            return _repository.Create(album);
+            return await _repository.Create(album);
         }
 
-        public bool Delete(int id)
+        public async Task<bool> Delete(int id)
         {
-            return _repository.Delete(id);
+            return await _repository.Delete(id);
         }
 
-        public bool Edit(Album album)
+        public async Task<bool> Edit(Album album)
         {
-            return _repository.Edit(album);
+            return await _repository.Edit(album);
         }
 
-        public Album GetById(int id)
+        public async Task<Album> GetById(int id)
         {
-            return _repository.GetById(id);
+            return await _repository.GetById(id);
         }
 
-        public IEnumerable<Album> List(string title, string artistName)
+        public async Task<IEnumerable<Album>> List(string title, string artistName)
         {
             Dictionary<string, dynamic> parameters = new Dictionary<string, dynamic>(2);
             if (!string.IsNullOrEmpty(title))
@@ -47,7 +47,7 @@ namespace Musicalog.Core.Services
             {
                 parameters.Add(nameof(Album.ArtistName), artistName);
             }
-            return _repository.Find(parameters);
+            return await _repository.Find(parameters);
         }
     }
 }
