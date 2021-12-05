@@ -45,7 +45,7 @@ namespace Musicalog.Core.Services
             }
             if (!string.IsNullOrEmpty(artistName))
             {
-                parameters.Add(nameof(Album.Title), artistName);
+                parameters.Add(nameof(Album.ArtistName), artistName);
             }
             return _repository.Find(parameters);
         }
