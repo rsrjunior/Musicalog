@@ -1,22 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Musicalog.Core.Services;
 using Musicalog.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Musicalog.Core.Enums;
 using Musicalog.Infra.Repositories;
 using Musicalog.Core.Interfaces;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.Configuration;
 
 namespace WebApi
 {

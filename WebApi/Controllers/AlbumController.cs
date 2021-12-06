@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Musicalog.Core;
-using Musicalog.Core.Services;
 using WebApi.Models;
 using Musicalog.Core.Entities;
 using Musicalog.Core.Enums;

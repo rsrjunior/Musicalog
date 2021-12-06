@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Musicalog.Core.Entities;
 using Musicalog.Core.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
