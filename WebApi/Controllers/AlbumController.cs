@@ -7,6 +7,7 @@ using WebApi.Models;
 using Musicalog.Core.Entities;
 using Musicalog.Core.Enums;
 using Musicalog.Core.Interfaces;
+using AutoMapper;
 
 namespace WebApi.Controllers
 {
@@ -15,9 +16,11 @@ namespace WebApi.Controllers
     public class AlbumController : ControllerBase
     {
         IAlbumService _albumService;
-        public AlbumController(IAlbumService albumService)
+        IMapper _mapper;
+        public AlbumController(IAlbumService albumService, IMapper mapper)
         {
             _albumService = albumService;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -26,14 +29,7 @@ namespace WebApi.Controllers
             try
             {
                 var albums = await _albumService.List(title, artistName);
-                return Ok(albums.Select(i => new AlbumModel
-                {
-                    Id = i.Id,
-                    ArtistName = i.ArtistName,
-                    Stock = i.Stock,
-                    Title = i.Title,
-                    Type = i.Type.ToString()
-                }));
+                return Ok(albums.Select(a => _mapper.Map<AlbumModel>(a)));
             }
             catch (Exception ex)
             {
@@ -53,14 +49,7 @@ namespace WebApi.Controllers
                     return NotFound();
                 }
 
-                return Ok(new AlbumModel
-                {
-                    Id = album.Id,
-                    ArtistName = album.ArtistName,
-                    Stock = album.Stock,
-                    Title = album.Title,
-                    Type = album.Type.ToString()
-                });
+                return Ok(_mapper.Map<AlbumModel>(album));
             }
             catch (Exception ex)
             {
@@ -74,22 +63,9 @@ namespace WebApi.Controllers
         {
             try
             {
-                var album = await _albumService.Create(new Album
-                {
-                    ArtistName = item.ArtistName,
-                    Title = item.Title,
-                    Stock = item.Stock,
-                    Type = Enum.Parse<AlbumType>(item.Type)
-                });
+                var album = await _albumService.Create(_mapper.Map<Album>(item));
 
-                return Ok(new AlbumModel
-                {
-                    Id = album.Id,
-                    ArtistName = album.ArtistName,
-                    Stock = album.Stock,
-                    Title = album.Title,
-                    Type = album.Type.ToString()
-                });
+                return Ok(_mapper.Map<AlbumModel>(album));
             }
             catch (Exception ex)
             {
@@ -109,13 +85,11 @@ namespace WebApi.Controllers
                 {
                     return NotFound();
                 }
+                item.Id = album.Id;
 
-                album.ArtistName = item.ArtistName;
-                album.Title = item.Title;
-                album.Stock = item.Stock;
-                album.Type = Enum.Parse<AlbumType>(item.Type);
+                var changedAlbum = _mapper.Map<Album>(item);
 
-                bool result = await _albumService.Edit(album);
+                bool result = await _albumService.Edit(changedAlbum);
 
                 return result ? Ok() : Problem("The resource was not changed");
             }

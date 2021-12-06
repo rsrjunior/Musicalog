@@ -9,6 +9,10 @@ using Musicalog.Infra.Repositories;
 using Musicalog.Core.Interfaces;
 using System.Data.SqlClient;
 using System.Data;
+using AutoMapper;
+using WebApi.Models;
+using Musicalog.Core.Enums;
+using System;
 
 namespace WebApi
 {
@@ -27,10 +31,18 @@ namespace WebApi
             services.AddControllers();
             services.AddSwaggerGen();
 
-   
+            var autoMap = new MapperConfiguration(config => {
+                config.CreateMap<Album, AlbumModel>(); 
+                config.CreateMap<AlbumModel, Album>().ForMember(d => d.Type, m => m.MapFrom(s => Enum.Parse<AlbumType>(s.Type))); 
+            });
+
+            services.AddSingleton(autoMap.CreateMapper());
+
             services.AddTransient<IDbConnection>(db => new SqlConnection(Configuration.GetConnectionString("MusicalogDB")));
             services.AddSingleton<IMusicalogRepository<Album>, DapperMusicalogRepository<Album>>();
             services.AddSingleton<IAlbumService, AlbumService>();
+
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
